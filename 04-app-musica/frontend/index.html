@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Mi música</title>
+	<link rel="icon" href="dj_icono.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="estilos.css">
+	<script src="config.js"></script>
+	<script src="app.js" defer></script>
+</head>
+<body>
+	<header class="barra">
+		<div class="marca">
+			<img class="logo" src="dj_icono.png" alt="">
+			<span>Mi música</span>
+		</div>
+		<div id="sesion">
+			<span id="usuario"></span>
+			<span id="insignia" class="insignia" hidden>admin</span>
+			<button id="entrar">Iniciar sesión</button>
+			<button id="salir" class="secundario" hidden>Cerrar sesión</button>
+		</div>
+	</header>
+
+	<main>
+		<!-- Sin sesión: la portada con el DJ -->
+		<section id="bienvenida" class="portada">
+			<div class="portada-texto">
+				<span class="etiqueta">En vivo desde la nube</span>
+				<h1>Tu música, servida desde AWS</h1>
+				<p>Inicia sesión para escuchar el catálogo. Cada canción viaja desde S3 directo a tu navegador.</p>
+				<button id="entrar-portada" class="grande">▶ Iniciar sesión</button>
+				<ul class="servicios">
+					<li>CloudFront</li><li>Cognito</li><li>API Gateway</li><li>Lambda</li><li>DynamoDB</li><li>S3</li>
+				</ul>
+			</div>
+			<div class="escenario">
+				<div class="foco"></div>
+				<img class="dj" src="dj.png" alt="El DJ de Cloud computing dynamic">
+			</div>
+		</section>
+
+		<!-- Con sesión: catálogo a la izquierda y el panel de subida a la derecha (el oyente también lo ve: la API lo rechaza) -->
+		<div id="app" hidden>
+			<section id="catalogo">
+				<div class="destacado">
+					<div class="destacado-texto">
+						<span class="etiqueta">Tu catálogo</span>
+						<h1 id="saludo">Hola</h1>
+						<p id="resumen"></p>
+						<div class="acciones">
+							<button id="reproducir-todo" class="grande">▶ Reproducir todo</button>
+							<button id="actualizar" class="secundario">↻ Actualizar</button>
+						</div>
+					</div>
+					<div class="escenario chico">
+						<div class="foco"></div>
+						<img class="dj" src="dj.png" alt="">
+						<div class="ecualizador" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+					</div>
+				</div>
+				<h2>Canciones</h2>
+				<ul id="lista" class="rejilla"></ul>
+			</section>
+
+			<aside>
+				<section id="panel-admin" class="tarjeta">
+					<h2>Subir una canción</h2>
+					<form id="formulario">
+						<label>Artista <input name="artista" required autocomplete="off"></label>
+						<label>Título <input name="titulo" required autocomplete="off"></label>
+						<label class="zona">
+							<input name="archivo" type="file" accept="audio/mpeg,.mp3" required>
+							<span class="zona-icono">♫</span>
+							<span id="nombre-archivo">Elige un mp3 o arrástralo aquí</span>
+						</label>
+						<button type="submit">Subir canción</button>
+					</form>
+					<p id="estado-subida" class="estado"></p>
+				</section>
+
+			</aside>
+		</div>
+	</main>
+
+	<!-- Barra de reproducción fija abajo -->
+	<footer id="reproductor" hidden>
+		<div class="sonando">
+			<div id="caratula" class="caratula mini"></div>
+			<div>
+				<strong id="sonando-titulo"></strong>
+				<span id="sonando-artista"></span>
+			</div>
+		</div>
+		<div class="controles">
+			<div class="botones">
+				<button id="anterior" class="icono" title="Anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+				<button id="pausa" class="icono play" title="Reproducir / pausar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg></button>
+				<button id="siguiente" class="icono" title="Siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+			</div>
+			<div class="progreso">
+				<span id="tiempo-actual">0:00</span>
+				<input id="barra-progreso" type="range" min="0" max="1000" value="0">
+				<span id="tiempo-total">0:00</span>
+			</div>
+			<p id="sonando" class="estado"></p>
+		</div>
+		<div class="volumen">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9z"/><path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+			<input id="volumen" type="range" min="0" max="100" value="80">
+		</div>
+		<audio id="audio"></audio>
+	</footer>
+</body>
+</html>
